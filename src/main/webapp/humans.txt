@@ -1,0 +1,18 @@
+# humanstxt.org/
+# The humans responsible & technology colophon
+
+# TEAM
+
+    Erland T. Green -- Junior Developer
+
+# THANKS
+
+    Southwestern Adventist University
+
+# TECHNOLOGY COLOPHON
+
+    HTML5, CSS3
+    jQuery, Modernizr
+    Bootstrap, Java
+    Spring, Hibernate
+    Thymeleaf
