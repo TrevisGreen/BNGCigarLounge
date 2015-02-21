@@ -60,6 +60,7 @@ THE SOFTWARE.
                             <label for="password"><span th:text="#{login.password}">Password</span></label>
                             <input type="password" id="password" name="password" th:value="*{password}" class="form-control" />
                         </div>
+                        <p class='text-center' >Not a member yet?<br/><a href="#" th:href="@{/user/register}"><strong>Register Now</strong></a> - it's fun and easy!</p>
                         <button type="submit" th:text="#{login.label}" class="btn btn-default">Login</button>
                     </form>
                 </div>
