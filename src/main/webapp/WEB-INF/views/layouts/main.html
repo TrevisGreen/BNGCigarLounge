@@ -49,7 +49,7 @@ THE SOFTWARE.
                 <nav class="collapse navbar-collapse" role="navigation">
                     <ul class="nav navbar-nav">
                         <li th:class="${activeMenu} == 'home' ? 'active'"><a href="#" th:href="@{/}" th:text="#{home.label}">Home</a></li>
-                        <li><a href="#" th:href="@{/logout}" th:text="#{logout.label}">Logout</a></li>
+                        <li th:if="${#authorization.expression('hasRole(''ROLE_USER'')')}"><a href="#" th:href="@{/logout}" th:text="#{logout.label}">Logout</a></li>
                     </ul>
                 </nav>
             </div>
