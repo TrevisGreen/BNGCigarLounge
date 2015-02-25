@@ -23,6 +23,7 @@
  */
 package org.trevisgreen.bngcigarlounge.dao.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -68,8 +69,10 @@ public class UserDaoHibernate extends BaseDao implements UserDao {
 
     @Override
     public User create(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword())); 
-        user.setPasswordVerification(user.getPassword());
+        if (StringUtils.isNotBlank(user.getPassword())) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            user.setPasswordVerification(user.getPassword());
+        }
         currentSession().save(user);
         return user;
     }

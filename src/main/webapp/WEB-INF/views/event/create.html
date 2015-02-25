@@ -51,11 +51,10 @@ THE SOFTWARE.
                 </div>
                 <form action="#" th:action="@{/logout}" method="POST" id="logoutForm">
                     <nav class="collapse navbar-collapse" role="navigation">
-                        <ul class="nav navbar-nav navbar-right">
+                        <ul class="nav navbar-nav navbar-right">                            
                             <li class="active"><a href="#" th:href="@{/event/create}" th:text="#{create.label}">Create</a></li>
                             <li class="disabled"><a href="#" th:href="@{/event/create}" th:text="#{event.label}">Event</a></li>
                             <li class="disabled"><a href="#" th:href="@{/event/confirm}" th:text="#{confirm.label}">Confirm</a></li>
-                            <li><a href="#" th:text="${#authentication.name}">TEST</a></li>
                             <li><a id="logoutLink" href="#" th:text="#{logout.label}">Logout</a></li>
                         </ul>
                     </nav>

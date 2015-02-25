@@ -58,6 +58,7 @@ import org.springframework.security.core.userdetails.UserDetails;
     @NamedQuery(name = "findUserByUsername", query = "select u from User u where u.username = :username"),
     @NamedQuery(name = "findUserByOpenId", query = "select u from User u where u.openId = :openId")
 })
+
 public class User implements Serializable, UserDetails {
 
     @Id
