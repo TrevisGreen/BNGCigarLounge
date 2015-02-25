@@ -38,10 +38,10 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.persistence.Version;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
@@ -72,6 +72,8 @@ public class User implements Serializable, UserDetails {
     @Column(nullable = false, unique = true)
     private String username;
     private String password;
+    @Transient
+    private String passwordVerification;
     private Boolean enabled = true;
     private Boolean accountExpired = false;
     private Boolean accountLocked = false;
@@ -325,5 +327,19 @@ public class User implements Serializable, UserDetails {
     @Override
     public String toString() {
         return "User{username=" + username + ", firstName=" + firstName + ", lastName=" + lastName + '}';
+    }
+
+    /**
+     * @return the passwordVerification
+     */
+    public String getPasswordVerification() {
+        return passwordVerification;
+    }
+
+    /**
+     * @param passwordVerification the passwordVerification to set
+     */
+    public void setPasswordVerification(String passwordVerification) {
+        this.passwordVerification = passwordVerification;
     }
 }

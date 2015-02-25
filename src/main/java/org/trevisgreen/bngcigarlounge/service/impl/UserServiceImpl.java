@@ -21,67 +21,53 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.trevisgreen.bngcigarlounge.dao.impl;
+package org.trevisgreen.bngcigarlounge.service.impl;
 
-import org.hibernate.Query;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.trevisgreen.bngcigarlounge.dao.BaseDao;
 import org.trevisgreen.bngcigarlounge.dao.UserDao;
 import org.trevisgreen.bngcigarlounge.model.Role;
 import org.trevisgreen.bngcigarlounge.model.User;
+import org.trevisgreen.bngcigarlounge.service.BaseService;
+import org.trevisgreen.bngcigarlounge.service.UserService;
 
 /**
  *
  * @author Trevis
  */
-@Repository
+@Service
 @Transactional
-public class UserDaoHibernate extends BaseDao implements UserDao {
+public class UserServiceImpl extends BaseService implements UserService {
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private UserDao userDao;
 
-    @Override
     @Transactional(readOnly = true)
+    @Override
     public User get(String username) {
-        Query query = currentSession().getNamedQuery("findUserByUsername");
-        query.setString("username", username);
-        return (User) query.uniqueResult();
+        return userDao.get(username);
     }
 
-    @Override
     @Transactional(readOnly = true)
+    @Override
     public User getByOpenId(String openId) {
-        Query query = currentSession().getNamedQuery("findUserByOpenId");
-        query.setString("openId", openId);
-        return (User) query.uniqueResult();
+        return userDao.getByOpenId(openId);
     }
 
     @Override
     public User update(User user) {
-        currentSession().update(user);
-        return user;
+        return userDao.update(user);
     }
 
     @Override
     public User create(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword())); 
-        user.setPasswordVerification(user.getPassword());
-        currentSession().save(user);
-        return user;
+        return userDao.create(user);
     }
 
     @Override
     public Role getRole(String authority) {
-        return (Role) currentSession().get(Role.class, authority);
+        return userDao.getRole(authority);
     }
 
-    @Override
-    public Role createRole(Role role) {
-        currentSession().save(role);
-        return role;
-    }
 }
