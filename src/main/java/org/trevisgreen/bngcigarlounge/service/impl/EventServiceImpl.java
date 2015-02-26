@@ -23,11 +23,14 @@
  */
 package org.trevisgreen.bngcigarlounge.service.impl;
 
+import java.util.Date;
 import java.util.Map;
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.trevisgreen.bngcigarlounge.dao.EventDao;
+import org.trevisgreen.bngcigarlounge.model.Event;
 import org.trevisgreen.bngcigarlounge.service.BaseService;
 import org.trevisgreen.bngcigarlounge.service.EventService;
 
@@ -47,5 +50,21 @@ public class EventServiceImpl extends BaseService implements EventService {
     public Map<String, Object> list(Map<String, Object> params) {
         return eventDao.list(params);
     }
+    
+    @Override
+    public Event create(Event event) {
+        Date date = new Date();
+        event.setDateCreated(date);
+        event.setLastUpdated(date);
+        event.setId(UUID.randomUUID().toString());
+        return eventDao.create(event);
+    }
+    
+    @Transactional
+    @Override
+    public Event get(String eventId) {
+        return eventDao.get(eventId);
+    }
+    
 
 }

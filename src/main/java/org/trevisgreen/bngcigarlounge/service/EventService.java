@@ -24,6 +24,7 @@
 package org.trevisgreen.bngcigarlounge.service;
 
 import java.util.Map;
+import org.trevisgreen.bngcigarlounge.model.Event;
 
 /**
  *
@@ -32,4 +33,8 @@ import java.util.Map;
 public interface EventService {
 
     public Map<String, Object> list(Map<String, Object> params);
+    
+    public Event create(Event event);
+    
+    public Event get(String eventId);
 }

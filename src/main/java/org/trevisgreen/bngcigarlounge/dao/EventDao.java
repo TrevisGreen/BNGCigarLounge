@@ -24,11 +24,17 @@
 package org.trevisgreen.bngcigarlounge.dao;
 
 import java.util.Map;
+import org.trevisgreen.bngcigarlounge.model.Event;
 
 /**
  *
  * @author Trevis
  */
 public interface EventDao {
+
     public Map<String, Object> list(Map<String, Object> params);
+    
+    public Event create(Event event);
+    
+    public Event get(String eventId);
 }

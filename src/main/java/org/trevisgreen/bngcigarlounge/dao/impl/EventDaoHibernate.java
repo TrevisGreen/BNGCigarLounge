@@ -42,8 +42,9 @@ import org.trevisgreen.bngcigarlounge.model.Event;
  */
 @Repository
 @Transactional
-public class EventDaoImpl extends BaseDao implements EventDao {
+public class EventDaoHibernate extends BaseDao implements EventDao {
 
+    @Transactional(readOnly = true)
     @Override
     public Map<String, Object> list(Map<String, Object> params) {
         log.debug("Event list");
@@ -69,6 +70,11 @@ public class EventDaoImpl extends BaseDao implements EventDao {
             criteria.add(properties);
             countCriteria.add(properties);
         }
+        if (params.containsKey("mine")) {
+            String principal = (String) params.get("principal");
+            Criteria a = criteria.createCriteria("user");
+            a.add(Restrictions.eq("username", principal));
+        }
         if (params.containsKey("max")) {
             criteria.setMaxResults((Integer) params.get("max"));
             if (params.containsKey("offset")) {
@@ -90,4 +96,17 @@ public class EventDaoImpl extends BaseDao implements EventDao {
         return params;
 
     }
+
+    @Override
+    public Event create(Event event) {
+        currentSession().save(event);
+        return event;
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public Event get(String eventId) {
+        return (Event) currentSession().get(Event.class, eventId);
+    }
+
 }
