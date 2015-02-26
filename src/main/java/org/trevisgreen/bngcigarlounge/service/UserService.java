@@ -23,6 +23,7 @@
  */
 package org.trevisgreen.bngcigarlounge.service;
 
+import java.util.Map;
 import org.trevisgreen.bngcigarlounge.model.Role;
 import org.trevisgreen.bngcigarlounge.model.User;
 
@@ -41,4 +42,10 @@ public interface UserService {
     public User create(User user);
 
     public Role getRole(String authority);
+    
+    public Map<String, Object> list(Map<String, Object> params);
+    
+    public User get(Long userId);
+    
+    public String delete(Long userId);
 }

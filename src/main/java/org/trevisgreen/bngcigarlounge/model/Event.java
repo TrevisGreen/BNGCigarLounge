@@ -172,7 +172,7 @@ public class Event implements Serializable {
      * @param time the time to set
      */
     public void setTime(String time) {
-        this.setTime(time);
+        this.time = time;
     }
 
     /**

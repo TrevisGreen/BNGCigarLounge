@@ -60,7 +60,7 @@ public class Bootstrap implements ApplicationListener<ContextRefreshedEvent> {
         Role userRole = userDao.getRole("ROLE_USER");
         if (userRole == null) {
             userRole = new Role("ROLE_USER");
-            userRole = userDao.createRole(userRole);
+            userDao.createRole(userRole);
         }
 
         log.info("Validating Users");
@@ -68,7 +68,7 @@ public class Bootstrap implements ApplicationListener<ContextRefreshedEvent> {
         if (admin == null) {
             admin = new User("admin@bngcigarlounge.com", "admin", "Admin", "User");
             admin.addRole(adminRole);
-            admin.addRole(userRole);
+           
 
             userDao.create(admin);
         }

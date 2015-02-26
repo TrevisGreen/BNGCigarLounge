@@ -23,8 +23,15 @@
  */
 package org.trevisgreen.bngcigarlounge.dao.impl;
 
+import java.util.Map;
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.Criteria;
 import org.hibernate.Query;
+import org.hibernate.criterion.Disjunction;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
@@ -86,5 +93,54 @@ public class UserDaoHibernate extends BaseDao implements UserDao {
     public Role createRole(Role role) {
         currentSession().save(role);
         return role;
+    }
+    
+    @Transactional(readOnly = true)
+    @Override
+    public Map<String, Object> list(Map<String, Object> params) {
+        log.debug("User list");
+        Criteria criteria = currentSession().createCriteria(User.class);
+        Criteria countCriteria = currentSession().createCriteria(User.class);
+        if (params.containsKey("filter")) {
+            String filter = (String) params.get("filter");
+            Disjunction properties = Restrictions.disjunction();
+            properties.add(Restrictions.ilike("username", filter, MatchMode.ANYWHERE));
+            properties.add(Restrictions.ilike("firstName", filter, MatchMode.ANYWHERE));
+            properties.add(Restrictions.ilike("lastName", filter, MatchMode.ANYWHERE));
+            criteria.add(properties);
+            countCriteria.add(properties);
+        }
+        if (params.containsKey("max")) {
+            criteria.setMaxResults((Integer) params.get("max"));
+            if (params.containsKey("offset")) {
+                criteria.setFirstResult((Integer) params.get("offset"));
+            }
+        }
+        if (params.containsKey("sort")) {
+            if (((String) params.get("order")).equals("desc")) {
+                criteria.addOrder(Order.desc((String) params.get("sort")));
+                params.put("order", "asc");
+            } else {
+                criteria.addOrder(Order.asc((String) params.get("sort")));
+                params.put("order", "desc");
+            }
+        }
+        params.put("list", criteria.list());
+        countCriteria.setProjection(Projections.rowCount());
+        params.put("totalItems", countCriteria.list().get(0));
+        return params;
+    }
+
+    @Override
+    public User get(Long userId) {
+        return (User) currentSession().get(User.class, userId);
+    }
+
+    @Override
+    public void delete(User user) {
+        Query query = currentSession().createQuery("delete from Event e where e.user.id = :userId");
+        query.setLong("userId", user.getId());
+        query.executeUpdate();
+        currentSession().delete(user);
     }
 }

@@ -21,34 +21,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.trevisgreen.bngcigarlounge.dao;
+package org.trevisgreen.bngcigarlounge.web;
 
-import java.util.Map;
-import org.trevisgreen.bngcigarlounge.model.Role;
-import org.trevisgreen.bngcigarlounge.model.User;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 /**
  *
  * @author Trevis
  */
-public interface UserDao {
-
-    public User get(String username);
-
-    public User getByOpenId(String openId);
-
-    public User update(User user);
-
-    public Role getRole(String authority);
-
-    public Role createRole(Role role);
-
-    public User create(User user);
+@Controller
+@RequestMapping("/admin")
+public class AdminController extends BaseController {
     
-    public Map<String, Object> list(Map<String, Object> params);
-    
-    public User get(Long userId);
-    
-    public void delete(User user);
-    
+    @RequestMapping(method = RequestMethod.GET)
+    public String index() {
+        return "redirect:/admin/user";
+    }
 }

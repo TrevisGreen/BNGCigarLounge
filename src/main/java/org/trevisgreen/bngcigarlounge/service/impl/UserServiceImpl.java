@@ -23,6 +23,7 @@
  */
 package org.trevisgreen.bngcigarlounge.service.impl;
 
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -70,4 +71,22 @@ public class UserServiceImpl extends BaseService implements UserService {
         return userDao.getRole(authority);
     }
 
+    @Override
+    public Map<String, Object> list(Map<String, Object> params) {
+        return userDao.list(params);
+    }
+    
+    @Override
+    public User get(Long userId) {
+        return userDao.get(userId);
+    }
+    
+    @Override
+    public String delete(Long userID) {
+        User user = userDao.get(userID);
+        userDao.delete(user);
+        return user.getUsername();
+    }
+    
+    
 }
