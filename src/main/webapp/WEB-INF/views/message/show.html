@@ -24,10 +24,10 @@ THE SOFTWARE.
 -->
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
-    <head th:include="/layouts/main :: head('Show User')">
+    <head th:include="/layouts/main :: head('Show Message')">
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-        <title>Login</title>
+        <title>Message</title>
         <meta name="description" content=""/>
         <meta name="author" content="Erland T. Green"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -42,21 +42,21 @@ THE SOFTWARE.
         </header>
 
         <div class="container">
-            <div class="row">
+            <div class="row content">
                 <div class="col-sm-12">
                     <div class="row">
                         <div class="col-sm-3">
-                            <ul class="nav">
-                                <li class="active"><a href="#" th:href="@{/admin/user}">Users</a></li>
-                                <li><a href="#" th:href="@{/admin/message}">Messages</a></li>
+                            <ul class="nav sidenav">
+                                <li><a href="#" th:href="@{/admin/user}">Users</a></li>
+                                <li class="active"><a href="#" th:href="@{/admin/message}">Messages</a></li>
                             </ul>
                         </div>
                         <div class="col-sm-9">
-                            <h1>Show User</h1>
+                            <h1>Show Message</h1>
 
                             <div class="well">
-                                <a href="#" th:href="@{/admin/user/list}" class="btn btn-default" ><i class="fa fa-list"></i> List</a>
-                                <a href="#" th:href="@{'/admin/user/delete/'+${user.id}}" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this user?');" ><i class="fa fa-trash-o"></i> Delete</a>
+                                <a href="#" th:href="@{/admin/message/list}" class="btn btn-default" ><i class="fa fa-list"></i> List</a>
+                                <a href="#" th:href="@{'/admin/message/edit/'+${message.id}}" class="btn btn-primary"><i class="fa fa-edit"></i> Edit</a>
                             </div>
 
                             <div class="row" th:unless="${#strings.isEmpty(errorMessage)}">
@@ -78,30 +78,27 @@ THE SOFTWARE.
                             </div>
 
                             <dl>
-                                <dt>Email</dt>
-                                <dd th:text="${user.username}">TEST</dd>
-                                <dt>First Name</dt>
-                                <dd th:text="${user.firstName}">TEST</dd>
-                                <dt>Last Name</dt>
-                                <dd th:text="${user.lastName}">TEST</dd>
-                                <dt>Sign In Provider</dt>
-                                <dd th:text="${user.signInProvider}">TEST</dd>
+                                <dt>Name</dt>
+                                <dd th:text="${message.name}">TEST</dd>
+                                <dt>Subject</dt>
+                                <dd th:text="${message.subject}">TEST</dd>
+                                <dt>Content</dt>
+                                <dd th:utext="${message.content}">TEST</dd>
                             </dl>
-
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
 
 
-            <footer role="contentinfo" th:replace="/layouts/main :: footer">
-            </footer>
+        <footer role="contentinfo" th:replace="/layouts/main :: footer">
+        </footer>
 
-            <div th:fragment="scripts" th:remove="tag">
-                <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-                <script src="../../../resources/js/bootstrap.min.js" th:src="@{/resources/js/bootstrap.min.js}"></script>
-                <script src="../../../resources/js/main.js" th:src="@{/resources/js/main.js}"></script>
-            </div>
+        <div th:fragment="scripts" th:remove="tag">
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+            <script src="../../../resources/js/bootstrap.min.js" th:src="@{/resources/js/bootstrap.min.js}"></script>
+            <script src="../../../resources/js/main.js" th:src="@{/resources/js/main.js}"></script>
         </div>
     </body>
 </html>
