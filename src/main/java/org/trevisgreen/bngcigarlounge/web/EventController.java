@@ -29,11 +29,15 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -44,9 +48,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.trevisgreen.bngcigarlounge.model.Event;
+import org.trevisgreen.bngcigarlounge.model.Message;
 import org.trevisgreen.bngcigarlounge.model.User;
 import org.trevisgreen.bngcigarlounge.service.EventService;
+import org.trevisgreen.bngcigarlounge.service.MessageService;
 import org.trevisgreen.bngcigarlounge.service.UserService;
+import org.trevisgreen.bngcigarlounge.utils.Constants;
 
 /**
  *
@@ -60,9 +67,15 @@ public class EventController extends BaseController {
 
     @Autowired
     private EventService eventService;
-
     @Autowired
     private UserService userService;
+    @Autowired
+    private MessageService messageService;
+    @Autowired 
+    private JavaMailSender mailSender;
+
+    public EventController() {
+    }
 
     @RequestMapping(value = "/create", method = RequestMethod.GET)
     public String showCreate(Model model) {
@@ -113,7 +126,23 @@ public class EventController extends BaseController {
             redirectAttributes.addFlashAttribute("event", event);
             redirectAttributes.addFlashAttribute("successMessage", "event.created");
             redirectAttributes.addFlashAttribute("successMessageAttrs", event.getName());
-
+            
+            Message code = messageService.get(Constants.CODE);
+            MimeMessage message = mailSender.createMimeMessage();
+            InternetAddress[] addresses = {new InternetAddress("B&G Cigar Lounge <bngcigarlounge@gmail.com>")};
+            message.addFrom(addresses);
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            helper.setTo(user.getUsername());
+            helper.setSubject(code.getSubject());
+            String content = code.getContent();
+            content = content.replaceAll("@@NAME@@", user.getFirstName());
+            content = content.replaceAll("@@USERNAME@@", user.getUsername());
+            content = content.replaceAll("@@CODE@@", event.getCode());
+            content = content.replaceAll("@@EVENT@@", event.getName());
+            
+            helper.setText(content, true);
+            mailSender.send(message);
+            
             return "redirect:/event/show/" + event.getId();
         } catch (Exception e) {
             log.error("Could not create event", e);
