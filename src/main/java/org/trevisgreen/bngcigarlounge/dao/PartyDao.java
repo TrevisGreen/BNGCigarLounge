@@ -21,17 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.trevisgreen.bngcigarlounge.utils;
+package org.trevisgreen.bngcigarlounge.dao;
+
+import org.trevisgreen.bngcigarlounge.model.Party;
 
 /**
  *
  * @author Trevis
  */
-public class Constants {
+public interface PartyDao {
 
-    public static final String LOGGED_USER = "LOGGED_USER";
-    public static final String CREATE = "CREATE";
-    public static final String SIGN_UP = "SIGN_UP";
-    public static final String CODE = "CODE";
-    public static final String THANKS ="THANKS";
+    public Integer getAllotedSeats(Party party);
+    
+    public Party create(Party party);
 }

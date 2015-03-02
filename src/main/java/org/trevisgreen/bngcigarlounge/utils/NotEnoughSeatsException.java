@@ -27,11 +27,17 @@ package org.trevisgreen.bngcigarlounge.utils;
  *
  * @author Trevis
  */
-public class Constants {
-
-    public static final String LOGGED_USER = "LOGGED_USER";
-    public static final String CREATE = "CREATE";
-    public static final String SIGN_UP = "SIGN_UP";
-    public static final String CODE = "CODE";
-    public static final String THANKS ="THANKS";
+public class NotEnoughSeatsException extends Exception {
+    
+    public NotEnoughSeatsException() {
+        super();
+    }
+    
+    public NotEnoughSeatsException(String message) {
+        super(message);
+    }
+    
+    public NotEnoughSeatsException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

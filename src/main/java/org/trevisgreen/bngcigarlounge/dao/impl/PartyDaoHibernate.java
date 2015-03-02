@@ -21,17 +21,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.trevisgreen.bngcigarlounge.utils;
+package org.trevisgreen.bngcigarlounge.dao.impl;
+
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+import org.trevisgreen.bngcigarlounge.dao.BaseDao;
+import org.trevisgreen.bngcigarlounge.dao.PartyDao;
+import org.trevisgreen.bngcigarlounge.model.Party;
 
 /**
  *
  * @author Trevis
  */
-public class Constants {
+@Repository
+@Transactional
+public class PartyDaoHibernate extends BaseDao implements PartyDao {
 
-    public static final String LOGGED_USER = "LOGGED_USER";
-    public static final String CREATE = "CREATE";
-    public static final String SIGN_UP = "SIGN_UP";
-    public static final String CODE = "CODE";
-    public static final String THANKS ="THANKS";
+    @Override 
+    public Integer getAllotedSeats(Party party) {
+        Criteria criteria = currentSession().createCriteria(Party.class);
+        criteria.createCriteria("event").add(Restrictions.idEq(party.getEvent().getId()));
+        criteria.setProjection(Projections.sum("seats"));
+        
+        Long results = (Long) criteria.uniqueResult();
+        log.debug("Results {}", results);
+        if (results == null) {
+            results = 0L;
+        }
+        return results.intValue();
+    }
+    
+    @Override
+    public Party create(Party party) {
+        currentSession().save(party);
+        return party;
+    }
 }

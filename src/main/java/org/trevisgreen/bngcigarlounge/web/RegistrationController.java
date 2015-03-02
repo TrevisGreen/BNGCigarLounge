@@ -23,13 +23,10 @@
  */
 package org.trevisgreen.bngcigarlounge.web;
 
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -41,11 +38,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.WebRequest;
-import org.trevisgreen.bngcigarlounge.model.Message;
 import org.trevisgreen.bngcigarlounge.model.User;
 import org.trevisgreen.bngcigarlounge.service.MessageService;
 import org.trevisgreen.bngcigarlounge.service.UserService;
-import org.trevisgreen.bngcigarlounge.utils.Constants;
 
 /**
  *
@@ -61,7 +56,7 @@ public class RegistrationController extends BaseController {
     @Autowired
     private JavaMailSender mailSender;
     @Autowired
-    private MessageService messageService;
+    MessageService messageService;
 
     @RequestMapping(value = "/user/register", method = RequestMethod.GET)
     public String showRegistrationForm(WebRequest request, Model model) {
@@ -88,6 +83,8 @@ public class RegistrationController extends BaseController {
             Authentication authenticatedUser = authenticationManager.authenticate(token);
 
             SecurityContextHolder.getContext().setAuthentication(authenticatedUser);
+            
+
         } else {
             log.warn("User already exists", user.getUsername());
             bindingResult.rejectValue("username", "user.email.already.exists");
@@ -97,5 +94,4 @@ public class RegistrationController extends BaseController {
         return "redirect:/event/create";
     }
 
-    
 }

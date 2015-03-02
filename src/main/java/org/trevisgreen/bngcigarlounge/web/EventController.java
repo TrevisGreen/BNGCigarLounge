@@ -71,7 +71,7 @@ public class EventController extends BaseController {
     private UserService userService;
     @Autowired
     private MessageService messageService;
-    @Autowired 
+    @Autowired
     private JavaMailSender mailSender;
 
     public EventController() {
@@ -126,7 +126,7 @@ public class EventController extends BaseController {
             redirectAttributes.addFlashAttribute("event", event);
             redirectAttributes.addFlashAttribute("successMessage", "event.created");
             redirectAttributes.addFlashAttribute("successMessageAttrs", event.getName());
-            
+
             Message code = messageService.get(Constants.CODE);
             MimeMessage message = mailSender.createMimeMessage();
             InternetAddress[] addresses = {new InternetAddress("B&G Cigar Lounge <bngcigarlounge@gmail.com>")};
@@ -139,10 +139,10 @@ public class EventController extends BaseController {
             content = content.replaceAll("@@USERNAME@@", user.getUsername());
             content = content.replaceAll("@@CODE@@", event.getCode());
             content = content.replaceAll("@@EVENT@@", event.getName());
-            
+
             helper.setText(content, true);
             mailSender.send(message);
-            
+
             return "redirect:/event/show/" + event.getId();
         } catch (Exception e) {
             log.error("Could not create event", e);
@@ -208,7 +208,7 @@ public class EventController extends BaseController {
             params.put("order", "asc");
         }
         params.put("order2", params.get("order"));
-        
+
         if (mine != null) {
             log.debug("Mine selected");
             params.put("mine", Boolean.TRUE);
@@ -222,5 +222,23 @@ public class EventController extends BaseController {
         model.addAllAttributes(params);
 
         return "event/list";
+    }
+
+    @RequestMapping(value = "/delete/{eventId}", method = RequestMethod.GET)
+    public String delete(@PathVariable String eventId, RedirectAttributes redirectAttributes, Principal principal) {
+        if (principal != null) {
+            try {
+                String name = eventService.delete(eventId, principal.getName());
+                redirectAttributes.addFlashAttribute("successMessage", "event.deleted");
+                redirectAttributes.addFlashAttribute("successMessageAttrs", name);
+            } catch (Exception e) {
+                log.error("Could not delete event", e);
+                redirectAttributes.addFlashAttribute("errorMessage", "event.not.deleted");
+                redirectAttributes.addFlashAttribute("errorMessageAttrs", e.getMessage());
+            }
+        } else {
+            redirectAttributes.addFlashAttribute("errorMessage", "event.not.deleted.cause.not.signed.in");
+        }
+        return "redirect:/event";
     }
 }

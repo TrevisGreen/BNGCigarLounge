@@ -37,4 +37,8 @@ public interface EventDao {
     public Event create(Event event);
     
     public Event get(String eventId);
+    
+    public Event getByCode(String code);
+    
+    public void delete(Event event);
 }

@@ -21,17 +21,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.trevisgreen.bngcigarlounge.utils;
+package org.trevisgreen.bngcigarlounge.service;
+
+import org.trevisgreen.bngcigarlounge.model.Party;
+import org.trevisgreen.bngcigarlounge.utils.NotEnoughSeatsException;
 
 /**
  *
  * @author Trevis
  */
-public class Constants {
-
-    public static final String LOGGED_USER = "LOGGED_USER";
-    public static final String CREATE = "CREATE";
-    public static final String SIGN_UP = "SIGN_UP";
-    public static final String CODE = "CODE";
-    public static final String THANKS ="THANKS";
+public interface PartyService {
+    
+    public Party create(Party party) throws NotEnoughSeatsException;
 }
