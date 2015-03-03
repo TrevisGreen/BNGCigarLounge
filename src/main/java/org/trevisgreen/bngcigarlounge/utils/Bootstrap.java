@@ -81,18 +81,18 @@ public class Bootstrap implements ApplicationListener<ContextRefreshedEvent> {
         if (signup == null) {
             signup = new Message();
             signup.setName(Constants.SIGN_UP);
-            signup.setSubject("Welcome to iRSVPed!");
+            signup.setSubject("Welcome to B&G Cigar Lounge!");
             StringBuilder content = new StringBuilder();
             content.append("<p>Salut @@NAME@@,</p>");
-            content.append("<p>We are excited to help you create your special event.</p>");
-            content.append("<p>To access your event's reports and settings you'll require to provide your credentials:</p>");
+            content.append("<p>We are excited that you are now a memeber of B&G Cigar Lounge.</p>");
+            content.append("<p>To access our special events you'll require to provide your credentials:</p>");
             content.append("<dl>");
             content.append("<dt>Email</dt>");
             content.append("<dd>@@USERNAME@@</dd>");
             content.append("<dt>Password</dt>");
             content.append("<dd>@@PASSWORD@@</dd>");
             content.append("</dl>");
-            content.append("<p>Thanks again for using our service.</p>");
+            content.append("<p>Thanks again for choosing B&G Cigar Lounge .</p>");
             signup.setContent(content.toString());
             messageDao.create(signup);
         }

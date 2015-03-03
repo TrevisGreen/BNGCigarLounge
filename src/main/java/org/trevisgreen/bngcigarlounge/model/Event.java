@@ -45,7 +45,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Entity
 @Table(name = "events")
 @NamedQueries({
-    @NamedQuery(name = "findEventsByCode", query = "select e from Events e where e.code = :code")
+    @NamedQuery(name = "findEventByCode", query = "select e from Event e where e.code = :code")
 })
 public class Event implements Serializable {
 
