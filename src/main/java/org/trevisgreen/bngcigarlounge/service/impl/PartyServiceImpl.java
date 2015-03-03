@@ -23,6 +23,8 @@
  */
 package org.trevisgreen.bngcigarlounge.service.impl;
 
+import java.util.Date;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +32,8 @@ import org.trevisgreen.bngcigarlounge.dao.EventDao;
 import org.trevisgreen.bngcigarlounge.dao.PartyDao;
 import org.trevisgreen.bngcigarlounge.model.Event;
 import org.trevisgreen.bngcigarlounge.model.Party;
+import org.trevisgreen.bngcigarlounge.model.Role;
+import org.trevisgreen.bngcigarlounge.model.User;
 import org.trevisgreen.bngcigarlounge.service.BaseService;
 import org.trevisgreen.bngcigarlounge.service.PartyService;
 import org.trevisgreen.bngcigarlounge.utils.NotEnoughSeatsException;
@@ -41,23 +45,39 @@ import org.trevisgreen.bngcigarlounge.utils.NotEnoughSeatsException;
 @Service
 @Transactional
 public class PartyServiceImpl extends BaseService implements PartyService {
-    
+
     @Autowired
     private PartyDao partyDao;
     @Autowired
     private EventDao eventDao;
-    
+
     @Override
     public Party create(Party party) throws NotEnoughSeatsException {
         Event event = eventDao.get(party.getEvent().getId());
-        if (event.getSeats() > 0 ) {
+        if (event.getSeats() > 0) {
             Integer allotedSeats = partyDao.getAllotedSeats(party);
-            log.debug("AllotedSeats: {} | {} | {}", new Object[] {allotedSeats, party.getSeats(), event.getSeats()});
+            log.debug("AllotedSeats: {} | {} | {}", new Object[]{allotedSeats, party.getSeats(), event.getSeats()});
             if ((allotedSeats + party.getSeats()) > event.getSeats()) {
                 throw new NotEnoughSeatsException("There's only " + (event.getSeats() - allotedSeats) + " place(s) available.");
             }
         }
+        party.setDateCreated(new Date());
         party = partyDao.create(party);
         return party;
+    }
+
+    @Override
+    public List<Party> findAllByEvent(Event event, User user) {
+        boolean isAdmin = false;
+        for(Role role : user.getRoles()) {
+            if (role.getAuthority().contains("ROLE_ADMIN")) {
+                isAdmin = true;
+                break;
+            }
+        }
+        if (isAdmin || event.getUser().getId().equals(user.getId())) {
+            return partyDao.findAllByEvent(event);
+        }
+        return null;
     }
 }

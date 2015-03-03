@@ -23,13 +23,16 @@
  */
 package org.trevisgreen.bngcigarlounge.dao.impl;
 
+import java.util.List;
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.trevisgreen.bngcigarlounge.dao.BaseDao;
 import org.trevisgreen.bngcigarlounge.dao.PartyDao;
+import org.trevisgreen.bngcigarlounge.model.Event;
 import org.trevisgreen.bngcigarlounge.model.Party;
 
 /**
@@ -40,12 +43,12 @@ import org.trevisgreen.bngcigarlounge.model.Party;
 @Transactional
 public class PartyDaoHibernate extends BaseDao implements PartyDao {
 
-    @Override 
+    @Override
     public Integer getAllotedSeats(Party party) {
         Criteria criteria = currentSession().createCriteria(Party.class);
         criteria.createCriteria("event").add(Restrictions.idEq(party.getEvent().getId()));
         criteria.setProjection(Projections.sum("seats"));
-        
+
         Long results = (Long) criteria.uniqueResult();
         log.debug("Results {}", results);
         if (results == null) {
@@ -53,10 +56,17 @@ public class PartyDaoHibernate extends BaseDao implements PartyDao {
         }
         return results.intValue();
     }
-    
+
     @Override
     public Party create(Party party) {
         currentSession().save(party);
         return party;
+    }
+
+    @Override
+    public List<Party> findAllByEvent(Event event) {
+        Query query = currentSession().createQuery("select p from Party p inner join p.event e where e.id = :eventId");
+        query.setString("eventId", event.getId());
+        return query.list();
     }
 }

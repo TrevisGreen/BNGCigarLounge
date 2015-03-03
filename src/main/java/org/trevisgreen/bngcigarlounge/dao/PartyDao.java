@@ -23,6 +23,10 @@
  */
 package org.trevisgreen.bngcigarlounge.dao;
 
+
+
+import java.util.List;
+import org.trevisgreen.bngcigarlounge.model.Event;
 import org.trevisgreen.bngcigarlounge.model.Party;
 
 /**
@@ -34,4 +38,6 @@ public interface PartyDao {
     public Integer getAllotedSeats(Party party);
     
     public Party create(Party party);
+    
+    public List<Party> findAllByEvent(Event event);
 }

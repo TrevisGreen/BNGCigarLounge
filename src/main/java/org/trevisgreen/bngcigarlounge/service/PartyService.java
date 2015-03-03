@@ -23,7 +23,10 @@
  */
 package org.trevisgreen.bngcigarlounge.service;
 
+import java.util.List;
+import org.trevisgreen.bngcigarlounge.model.Event;
 import org.trevisgreen.bngcigarlounge.model.Party;
+import org.trevisgreen.bngcigarlounge.model.User;
 import org.trevisgreen.bngcigarlounge.utils.NotEnoughSeatsException;
 
 /**
@@ -33,4 +36,7 @@ import org.trevisgreen.bngcigarlounge.utils.NotEnoughSeatsException;
 public interface PartyService {
     
     public Party create(Party party) throws NotEnoughSeatsException;
+    
+    public List<Party> findAllByEvent(Event event, User user);
+    
 }
